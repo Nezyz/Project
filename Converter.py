@@ -5,44 +5,62 @@ from PyQt5.QtWidgets import QInputDialog
 
 
 class Example(QMainWindow):
+
     def __init__(self):
         super().__init__()
         uic.loadUi('int.ui', self)
         self.initUI()
 
     def initUI(self):
-        self.setGeometry(200, 200, 550, 550)
         self.setWindowTitle('Диалоговые окна')
-        self.button_3 = QPushButton(self)
-        self.button_3.move(60, 100)
-        self.button_3.setText("Единица")
+        self.button_0.clicked.connect(self.run0)
         self.button_3.clicked.connect(self.run3)
-        self.button_4 = QPushButton(self)
-        self.button_4.move(60, 250)
-        self.button_4.setText("Результат")
         self.button_4.clicked.connect(self.run4)
         self.from_ = 0
         self.to_ = 0
+        self.keys = {"Масса": "mass","Скорость": "v", "Время":  "time","Длина":"len"}
+        self.key = self.keys["Масса"]
 
         self.show()
 
-    def run3(self):
-        i, okBtnPressed = QInputDialog.getItem(self, "Выберите единицу измериения", "Единицы измерения",
-                                               ("Тонны", "Килограммы", "Граммы"), 2, False)
+    def get_dialog(self, from_=True):
+        element = {"mass": ("Тонны", "Килограммы", "Граммы"),
+                   "v": ("Мм/с", "М/с", "Км/ч", "Км/с"),
+                   "time": ("Секунды", "Минуты", "Часы", "Сутки"),
+                   "len": ("Миллиметры", "Сантиметры", "Метры", "Километры")}
+        values = {"mass": {"Тонны": 1000000, "Центнеры": 100000, "Килограммы": 1000, "Граммы": 0},
+                  "v": {"Мм/с": 1000000, "М/с": 100, "Км/ч": 3600, "Км/с": 0},
+                  "time": {"Секундды": 86400, "Минуты": 3600, "Часы": 60, "Сутки": 0},
+                  "len": {"Миллиметры": 1000000, "Сантиметры": 100000, "Метры": 1000, "Километры": 0}}
+
+        i, okBtnPressed = QInputDialog.getItem(self, "Выберите единицу измерения", "Единицы измерения",
+                                               element[self.key], 1, False)
         if okBtnPressed:
-            self.button_3.setText(i)
-            self.from_ = i
+            if from_:
+                self.button_3.setText("Исходная единица:"+i)
+                self.from_ = i
+            else:
+
+                self.button_4.setText("Новая единица:"+i)
+                self.to_ = i
+
+                self.result.display(
+                    str(float(self.lineEdit.text()) * values[self.key][self.from_] / values[self.key][self.to_]))
+
+    def run0(self):
+        i, okBtnPressed = QInputDialog.getItem(self, "Выберите преобразование", "Тип",
+                                                ("Масса", "Скорость", "Время", "Длина"), 0, False)
+        if okBtnPressed:
+            self.key = self.keys[i]
+            self.button_0.setText("Выбор преобразования:"+i)
+
+    def run3(self):
+        self.get_dialog(True)
 
 
     def run4(self):
-        i, okBtnPressed = QInputDialog.getItem(self, "Выберите единицу измериения", "Единицы измерения",
-                                               ("Тонны", "Килограммы", "Граммы"), 2, False)
-        if okBtnPressed:
-            self.to_ = i
+        self.get_dialog(False)
 
-            s = {"Тонны": 1000000, "Килограммы": 1000, "Граммы": 1}
-
-            self.button_4.setText(str(float(self.lineEdit.text())*s[self.from_]/s[self.to_]))
 
 
 app = QApplication(sys.argv)
