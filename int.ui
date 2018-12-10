@@ -78,6 +78,9 @@
      </item>
      <item>
       <widget class="QLCDNumber" name="result">
+       <property name="cursor">
+        <cursorShape>ArrowCursor</cursorShape>
+       </property>
        <property name="digitCount">
         <number>12</number>
        </property>

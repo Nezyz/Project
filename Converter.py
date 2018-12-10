@@ -18,7 +18,8 @@ class Example(QMainWindow):
         self.button_4.clicked.connect(self.run4)
         self.from_ = 0
         self.to_ = 0
-        self.keys = {"Масса": "mass", "Скорость": "v", "Время": "time", "Длина": "len", "Площадь": "Area"}
+        self.keys = {"Масса": "mass", "Скорость": "v", "Время": "time",
+                     "Длина": "len", "Площадь": "Area"}
         self.key = self.keys["Масса"]
 
         self.show()
@@ -42,12 +43,15 @@ class Example(QMainWindow):
                 self.button_3.setText("Исходная единица:" + i)
                 self.from_ = i
             else:
+                 try:
 
-                self.button_4.setText("Новая единица:" + i)
-                self.to_ = i
+                    self.button_4.setText("Новая единица:" + i)
+                    self.to_ = i
 
-                self.result.display(
-                    str(float(self.lineEdit.text()) * values[self.key][self.from_] / values[self.key][self.to_]))
+                    self.result.display(
+                        str(float(self.lineEdit.text()) * values[self.key][self.from_] / values[self.key][self.to_]))
+                 except Exception:
+                    pass
 
     def run0(self):
         i, okBtnPressed = QInputDialog.getItem(self, "Выберите преобразование", "Тип",
