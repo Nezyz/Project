@@ -1,7 +1,8 @@
 import sys
 from PyQt5 import uic
-from PyQt5.QtWidgets import QMainWindow, QApplication, QPushButton
+from PyQt5.QtWidgets import QMainWindow, QApplication
 from PyQt5.QtWidgets import QInputDialog
+from PyQt5.QtCore import Qt
 
 
 class Example(QMainWindow):
@@ -12,10 +13,11 @@ class Example(QMainWindow):
         self.initUI()
 
     def initUI(self):
-        self.setWindowTitle('Диалоговые окна')
-        self.button_0.clicked.connect(self.run0)
-        self.button_3.clicked.connect(self.run3)
-        self.button_4.clicked.connect(self.run4)
+        self.setWindowTitle('Конвертор единиц')
+        self.save.clicked.connect(self.button_save)
+        self.selection.clicked.connect(self.transform_selection)
+        self.source.clicked.connect(self.source_unit)
+        self.new_2.clicked.connect(self.new_unit)
         self.from_ = 0
         self.to_ = 0
         self.keys = {"Масса": "mass", "Скорость": "v", "Время": "time",
@@ -30,41 +32,50 @@ class Example(QMainWindow):
                    "time": ("Секунды", "Минуты", "Часы", "Сутки"),
                    "len": ("Миллиметры", "Сантиметры", "Метры", "Километры"),
                    "Area": ("Метр Квадратный", "Ар", "Гектар", "Километр Квадратный")}
-        values = {"mass": {"Тонны": 1000000, "Центнеры": 100000, "Килограммы": 1000, "Граммы": 1},
-                  "v": {"Мм/с": 1000000, "М/с": 100, "Км/ч": 3600, "Км/с": 1},
-                  "time": {"Секундды": 86400, "Минуты": 3600, "Часы": 60, "Сутки": 1},
-                  "len": {"Миллиметры": 1000000, "Сантиметры": 100000, "Метры": 1000, "Километры": 1},
-                  "Area": {"Метр Квадратный": 1000000, "Ар": 10000, "Гектар": 100, "Километр Квадратный": 1}}
+        self.values = {"mass": {"Тонны": 1000000, "Центнеры": 100000, "Килограммы": 1000, "Граммы": 1},
+                       "v": {"Мм/с": 1000000, "М/с": 100, "Км/ч": 3600, "Км/с": 1},
+                       "time": {"Секундды": 86400, "Минуты": 3600, "Часы": 60, "Сутки": 1},
+                       "len": {"Миллиметры": 1000000, "Сантиметры": 100000, "Метры": 1000, "Километры": 1},
+                       "Area": {"Метр Квадратный": 1000000, "Ар": 10000, "Гектар": 100, "Километр Квадратный": 1}}
 
         i, okBtnPressed = QInputDialog.getItem(self, "Выберите единицу измерения", "Единицы измерения",
                                                element[self.key], 0, False)
         if okBtnPressed:
             if from_:
-                self.button_3.setText("Исходная единица:" + i)
+                self.source.setText("Исходная единица:" + i)
                 self.from_ = i
             else:
-                 try:
+                try:
 
-                    self.button_4.setText("Новая единица:" + i)
+                    self.new_2.setText("Новая единица:" + i)
                     self.to_ = i
 
                     self.result.display(
-                        str(float(self.lineEdit.text()) * values[self.key][self.from_] / values[self.key][self.to_]))
-                 except Exception:
+                        str(float(self.lineEdit.text()) * self.values[self.key][self.from_] / self.values[self.key][
+                            self.to_]))
+                except Exception:
                     pass
 
-    def run0(self):
+    def transform_selection(self):
         i, okBtnPressed = QInputDialog.getItem(self, "Выберите преобразование", "Тип",
                                                ("Масса", "Скорость", "Время", "Длина", "Площадь"), 0, False)
         if okBtnPressed:
             self.key = self.keys[i]
-            self.button_0.setText("Выбор преобразования:" + i)
+            self.selection.setText("Выбор преобразования:" + i)
 
-    def run3(self):
+    def keyPressEvent(self, event):
+        if event.key() == Qt.Key_Enter or event.key() == Qt.Key_Enter - 1:
+            self.result.display(
+                str(float(self.lineEdit.text()) * self.values[self.key][self.from_] / self.values[self.key][self.to_]))
+
+    def source_unit(self):
         self.get_dialog(True)
 
-    def run4(self):
+    def new_unit(self):
         self.get_dialog(False)
+
+    def button_save(self):
+        pass
 
 
 app = QApplication(sys.argv)

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>521</width>
-    <height>520</height>
+    <width>581</width>
+    <height>600</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -25,7 +25,7 @@
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="QPushButton" name="button_0">
+      <widget class="QPushButton" name="selection">
        <property name="text">
         <string>Выбор преобразования</string>
        </property>
@@ -39,7 +39,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="button_3">
+      <widget class="QPushButton" name="source">
        <property name="text">
         <string>Исходная единица</string>
        </property>
@@ -49,6 +49,13 @@
       <widget class="QLabel" name="label_2">
        <property name="text">
         <string>Значение</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>При каждом измении нажмите &quot;Enter&quot;</string>
        </property>
       </widget>
      </item>
@@ -63,7 +70,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="button_4">
+      <widget class="QPushButton" name="new_2">
        <property name="text">
         <string>Новая единица</string>
        </property>
@@ -88,13 +95,26 @@
      </item>
     </layout>
    </widget>
+   <widget class="QPushButton" name="save">
+    <property name="geometry">
+     <rect>
+      <x>110</x>
+      <y>450</y>
+      <width>181</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Сохранить результаты</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>521</width>
+     <width>581</width>
      <height>21</height>
     </rect>
    </property>
