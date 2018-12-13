@@ -23,7 +23,7 @@ class Example(QMainWindow):
         self.keys = {"Масса": "mass", "Скорость": "v", "Время": "time",
                      "Длина": "len", "Площадь": "Area"}
         self.key = self.keys["Масса"]
-
+        self.res = ""
         self.show()
 
     def get_dialog(self, from_=True):
@@ -33,10 +33,10 @@ class Example(QMainWindow):
                    "len": ("Миллиметры", "Сантиметры", "Метры", "Километры"),
                    "Area": ("Метр Квадратный", "Ар", "Гектар", "Километр Квадратный")}
         self.values = {"mass": {"Тонны": 1000000, "Центнеры": 100000, "Килограммы": 1000, "Граммы": 1},
-                       "v": {"Мм/с": 1000000, "М/с": 100, "Км/ч": 3600, "Км/с": 1},
-                       "time": {"Секундды": 86400, "Минуты": 3600, "Часы": 60, "Сутки": 1},
-                       "len": {"Миллиметры": 1000000, "Сантиметры": 100000, "Метры": 1000, "Километры": 1},
-                       "Area": {"Метр Квадратный": 1000000, "Ар": 10000, "Гектар": 100, "Километр Квадратный": 1}}
+                       "v": {"Мм/с": 1, "М/с": 3600, "Км/ч": 100, "Км/с": 1000000},
+                       "time": {"Секунды": 1, "Минуты": 60, "Часы": 3600, "Сутки": 86400},
+                       "len": {"Миллиметры": 1, "Сантиметры": 1000, "Метры": 100000, "Километры": 1000000},
+                       "Area": {"Метр Квадратный": 1, "Ар": 100, "Гектар": 10000, "Километр Квадратный": 1000000}}
 
         i, okBtnPressed = QInputDialog.getItem(self, "Выберите единицу измерения", "Единицы измерения",
                                                element[self.key], 0, False)
@@ -49,10 +49,10 @@ class Example(QMainWindow):
 
                     self.new_2.setText("Новая единица:" + i)
                     self.to_ = i
-
-                    self.result.display(
-                        str(float(self.lineEdit.text()) * self.values[self.key][self.from_] / self.values[self.key][
-                            self.to_]))
+                    self.res = str(
+                        float(self.lineEdit.text()) * self.values[self.key][self.from_] / self.values[self.key][
+                            self.to_])
+                    self.result.display(self.res)
                 except Exception:
                     pass
 
@@ -65,8 +65,12 @@ class Example(QMainWindow):
 
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_Enter or event.key() == Qt.Key_Enter - 1:
-            self.result.display(
-                str(float(self.lineEdit.text()) * self.values[self.key][self.from_] / self.values[self.key][self.to_]))
+            try:
+                self.res = str(float(self.lineEdit.text()) * self.values[self.key][self.from_] / self.values[self.key][
+                    self.to_])
+                self.result.display(self.res)
+            except Exception:
+                pass
 
     def source_unit(self):
         self.get_dialog(True)
@@ -75,7 +79,9 @@ class Example(QMainWindow):
         self.get_dialog(False)
 
     def button_save(self):
-        pass
+        f = open('Результаты измерений.txt', 'w')
+        f.write(self.res)
+        f.close()
 
 
 app = QApplication(sys.argv)
