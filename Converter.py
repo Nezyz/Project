@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import QInputDialog
 from PyQt5.QtCore import Qt
 
 
-class Example(QMainWindow):
+class Convert(QMainWindow):
 
     def __init__(self):
         super().__init__()
@@ -35,7 +35,7 @@ class Example(QMainWindow):
         self.values = {"mass": {"Тонны": 1000000, "Центнеры": 100000, "Килограммы": 1000, "Граммы": 1},
                        "v": {"Мм/с": 1, "М/с": 1000, "Км/ч": 36000, "Км/с": 1000000},
                        "time": {"Секунды": 1, "Минуты": 60, "Часы": 3600, "Сутки": 86400},
-                       "len": {"Миллиметры": 1, "Сантиметры": 1000, "Метры": 100000, "Километры": 1000000},
+                       "len": {"Миллиметры": 1, "Сантиметры": 100, "Метры": 10000, "Километры": 10000000},
                        "Area": {"Метр Квадратный": 1, "Ар": 100, "Гектар": 10000, "Километр Квадратный": 1000000}}
 
         i, okBtnPressed = QInputDialog.getItem(self, "Выберите единицу измерения", "Единицы измерения",
@@ -86,6 +86,6 @@ class Example(QMainWindow):
 
 app = QApplication(sys.argv)
 
-ex = Example()
+ex = Convert()
 ex.show()
 sys.exit(app.exec_())
